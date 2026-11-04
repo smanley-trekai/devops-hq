@@ -13,9 +13,9 @@ For the pending access work, see the [state bucket IAM review plan](state-bucket
 - Bucket: uniform bucket-level access, public access prevention, object versioning, `force_destroy = false`, and `prevent_destroy` while the lifecycle block remains present. Existing project/organization inherited permissions still apply; this does not itself configure least-privilege IAM or prevent all access. It does not set a bucket retention policy that could interfere with state locking; review soft-delete and retention behavior separately.
 - This root now uses the GCS backend with bucket `devops-hq-bucket` and prefix `bootstrap/state-bucket`. The initial local bootstrap was a one-time procedure. Effective inherited IAM, backup owner and recovery procedures still need review.
 
-## Bootstrap and migration sequence
+## Historical bootstrap and migration sequence
 
-The bucket was created and state migrated; effective IAM and recovery checks remain open. The sequence below documents the bootstrap process and remaining follow-up.
+The bucket was created and state migrated on 2026-11-03. The sequence below records the completed bootstrap process and remaining follow-up; do not repeat the creation or migration steps for the existing state. Effective IAM and recovery checks remain open.
 
 1. Confirm `smanley-experimental` exists in folder `1045034779579`, billing is enabled via an explicitly chosen account, the bucket name is available, and the administrator/approved execution identity has the required permissions. Select a backup owner and restricted state access; do not assume the caller's identity is the Terraform ADC identity.
 2. Work on a trusted machine with the pinned versions, a protected working directory and approved credentials. Never print or commit state, credential files or saved plans. Run offline `terraform fmt -check` and backend-disabled `terraform init` / `terraform validate` first.

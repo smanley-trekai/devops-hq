@@ -16,7 +16,7 @@ The Terraform root for this guide is [`terraform/PAM/rd/`](../../../terraform/PA
 
 1. Confirm the repository owner, access policy, independent reviewers, state owner, execution identity and contractor end date. The repository must remain private.
 2. Inspect existing entitlement and Terraform state ownership, folder IAM and PAM service-agent/API readiness. Ensure no existing state or authoritative IAM policy conflicts. Do not add broad service-agent permissions by assumption.
-3. The proposed GCS backend uses `devops-hq-bucket` and prefix `pam/rd-folder`, separate from bootstrap state. This root was initialized and applied against it in a staging working directory. The bucket IAM review is on hold at the user's request; effective access and backup ownership remain unverified. Do not commit state, backend credentials or plans.
+3. The GCS backend uses `devops-hq-bucket` and prefix `pam/rd-folder`, separate from bootstrap state. This root was initialized and applied against it in a staging working directory. The bucket IAM review is on hold at the user's request; effective access and backup ownership remain unverified. Do not commit state, backend credentials or plans.
 4. Confirm and review the naming convention, scope and log sources, then review the code and exact live Terraform plan. A plan or apply needs the appropriate explicit authorization and change process.
 5. The folder entitlement has been created and its settings verified. Test a real request, approval, log visibility and expiry with the relevant people, and record results. Only then decide separately whether to remove the old entitlement.
 
