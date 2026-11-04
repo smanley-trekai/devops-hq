@@ -4,7 +4,8 @@ locals {
   rd_folder_id = "653186815477"
 
   rd_logs_entitlement = {
-    entitlement_id       = "pam-rd-folder-logs-viewer-ait"
+    entitlement_id       = "pam-rd-folder-logs-viewer-ait" # existing live ID; immutable, keep
+    roles                = ["roles/logging.viewer"]
     max_duration_seconds = 28800
     eligible_principals  = ["user:contractor-ait-boopathin@trekai.org"]
     approver_principals = [

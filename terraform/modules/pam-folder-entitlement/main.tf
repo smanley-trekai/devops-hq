@@ -1,5 +1,5 @@
 # This narrowly scoped module always uses one manual approval, requires both
-# justifications and grants Logs Viewer on a folder. Do not change these
+# justifications and grants the caller's roles on a folder. Do not change these
 # controls without reviewing every root that calls this module.
 resource "google_privileged_access_manager_entitlement" "this" {
   entitlement_id       = var.entitlement_id
@@ -16,8 +16,11 @@ resource "google_privileged_access_manager_entitlement" "this" {
       resource      = "//cloudresourcemanager.googleapis.com/folders/${var.folder_id}"
       resource_type = "cloudresourcemanager.googleapis.com/Folder"
 
-      role_bindings {
-        role = "roles/logging.viewer"
+      dynamic "role_bindings" {
+        for_each = toset(var.roles)
+        content {
+          role = role_bindings.value
+        }
       }
     }
   }

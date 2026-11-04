@@ -18,6 +18,16 @@ variable "entitlement_id" {
   }
 }
 
+variable "roles" {
+  description = "Non-empty list of predefined or custom IAM roles granted on the folder while a request is active."
+  type        = list(string)
+
+  validation {
+    condition     = length(var.roles) > 0 && alltrue([for role in var.roles : can(regex("^(roles/|organizations/[0-9]+/roles/)", role))])
+    error_message = "Provide at least one role in roles/... or organizations/<id>/roles/... form."
+  }
+}
+
 variable "max_duration_seconds" {
   description = "Maximum grant duration in seconds; a requester may request less."
   type        = number

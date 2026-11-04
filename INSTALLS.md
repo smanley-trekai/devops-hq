@@ -20,7 +20,7 @@ The provider lock contains signed registry checksums for `darwin_arm64` and `lin
 3. Check versions with `terraform version`, `git --version`, and `gcloud --version` (if installed). Compare Terraform against `.terraform-version` and the root's `required_version`; compare the provider constraint with that root's lock file.
 4. For local syntax validation, run `terraform fmt -check -recursive` from the repo root. In the applicable root, `terraform init -backend=false -lockfile=readonly` followed by `terraform validate` checks configuration without configuring the remote backend, but may download provider plugins and executes them locally. Use trusted providers and the approved network policy. These checks do not test live resources, IAM or state.
 
-The repository currently has `terraform/PAM/rd` and `terraform/bootstrap/state-bucket` roots. CI runners, Terraform lint/security scanners, GitHub CLI and any version manager are **not yet required or pinned**. Before adopting any, record its exact version, trusted source, execution permissions, supported platforms and how it is upgraded; avoid inventing pins for tools that are not in use.
+The repository currently has `terraform/pam/rd` and `terraform/bootstrap/state-bucket` roots. CI runners, Terraform lint/security scanners, GitHub CLI and any version manager are **not yet required or pinned**. Before adopting any, record its exact version, trusted source, execution permissions, supported platforms and how it is upgraded; avoid inventing pins for tools that are not in use.
 
 ## Version upgrades
 

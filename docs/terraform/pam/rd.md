@@ -6,11 +6,11 @@ The entitlement lets `contractor-ait-boopathin@trekai.org` request `roles/loggin
 
 The existing `rd-bastion-logs-contractor` entitlement is **project-scoped** in `trekai-prj-rd-app-mgmt`. This separate folder-scoped entitlement does not import, alter, or delete the existing one. Check active grants, approval history and dependencies before deciding whether to retire the old entitlement separately.
 
-The Terraform root for this guide is [`terraform/PAM/rd/`](../../../terraform/PAM/rd/).
+The Terraform root for this guide is [`terraform/pam/rd/`](../../../terraform/pam/rd/).
 
 ## How the configuration is organized
 
-[`access-policy.tf`](../../../terraform/PAM/rd/access-policy.tf) is the reviewable source of the RD folder ID, requester, approvers, duration and entitlement name. [`main.tf`](../../../terraform/PAM/rd/main.tf) passes those values into the narrow [folder Logs Viewer module](../../../terraform/modules/pam-folder-logs-viewer/), which derives both the entitlement parent and resource from the same ID and enforces the role and approval settings. The file uses a Terraform `locals` block: “local” means the names are scoped to this Terraform root; it does not mean the file stays on this computer or is excluded from Git. Naming the folder once keeps the parent and access target consistent. These values describe a confidential access policy rather than credentials. Keep the repository private and approved for TrekAI data, and allow only authorized reviewers and maintainers to read or change it. Never put passwords, tokens or keys here. The GCS backend holds Terraform state; it does not automatically store or protect this source file. Do not move access rules to ignored variable files merely to hide them from reviewers.
+[`access-policy.tf`](../../../terraform/pam/rd/access-policy.tf) is the reviewable source of the RD folder ID, requester, approvers, role, duration and entitlement name. [`main.tf`](../../../terraform/pam/rd/main.tf) passes those values into the narrow [folder PAM entitlement module](../../../terraform/modules/pam-folder-entitlement/), which derives both the entitlement parent and resource from the same ID and enforces the approval settings; the root chooses the role (`roles/logging.viewer`). The file uses a Terraform `locals` block: “local” means the names are scoped to this Terraform root; it does not mean the file stays on this computer or is excluded from Git. Naming the folder once keeps the parent and access target consistent. These values describe a confidential access policy rather than credentials. Keep the repository private and approved for TrekAI data, and allow only authorized reviewers and maintainers to read or change it. Never put passwords, tokens or keys here. The GCS backend holds Terraform state; it does not automatically store or protect this source file. Do not move access rules to ignored variable files merely to hide them from reviewers.
 
 ## Before future changes
 
@@ -29,7 +29,7 @@ This is Terraform infrastructure configuration, not an application server. The e
 1. From the repository root, check that Terraform `1.17.1` is installed and inspect the access policy and code:
 
    ```bash
-   cd terraform/PAM/rd
+   cd terraform/pam/rd
    terraform version
    terraform fmt -check -recursive ../..
    ```
@@ -84,3 +84,7 @@ To actually use PAM, the eligible contractor requests a grant through Google Clo
 ## Offline checks
 
 `terraform fmt -check -recursive` checks formatting. `terraform init -backend=false` and `terraform validate` require the specified provider to be available locally or downloaded from a trusted registry; they do not verify live state or effective access. Provider version `7.22.0` is an initial explicit pin, subject to team review. The lock file records hashes for the installed provider; add other supported platforms through the normal provider-lock workflow before using it elsewhere.
+
+## Change record
+
+**2026-11-04: rename and `roles` input (local only, not committed or planned).** Renamed `terraform/PAM/` to `terraform/pam/` and `terraform/modules/pam-folder-logs-viewer/` to `terraform/modules/pam-folder-entitlement/`; the matching docs moved too. The module's hardcoded `roles/logging.viewer` became a required `roles` input, and this root passes `["roles/logging.viewer"]`. Unchanged: module label `rd_folder_logs_viewer` (same state address, no `moved` block), backend prefix `pam/rd-folder`, entitlement ID and lock file. Authorized by the repository owner in conversation. Verified locally: `terraform fmt -check -recursive` and `init -backend=false -lockfile=readonly` + `validate` passed. **Follow-up:** after approval, re-initialize against the live backend and confirm a plan shows no changes (a `dynamic` `role_bindings` block with one role is expected to match the existing entitlement, but this is not yet verified).

@@ -4,7 +4,7 @@
 
 ## Layout
 
-Keep Terraform root configurations small and separate by ownership, environment and permission boundary. Each root owns one reviewed state and one provider lock file. Shared modules may be added when reuse is real and module ownership/versioning is agreed. Keep the user's existing `terraform/PAM/rd/` path.
+Keep Terraform root configurations small and separate by ownership, environment and permission boundary. Each root owns one reviewed state and one provider lock file. Shared modules may be added when reuse is real and module ownership/versioning is agreed. PAM roots live under `terraform/pam/<scope>/` (lowercase, renamed from `terraform/PAM/` on 2026-11-04; the GCS state prefix `pam/rd-folder` was unchanged).
 
 ```text
 devops-hq/
@@ -13,14 +13,14 @@ devops-hq/
 ├── .terraform-version       # CLI selection hint
 ├── docs/                    # design, runbooks and Terraform guides
 ├── terraform/
-│   ├── PAM/
+│   ├── pam/
 │   │   └── rd/              # existing folder-scoped root
 │   │       ├── versions.tf  # provider + partial backend
 │   │       ├── main.tf
 │   │       ├── access-policy.tf  # reviewed RD-specific policy inputs
 │   │       └── .terraform.lock.hcl
 │   ├── bootstrap/state-bucket/  # separate bootstrap root with GCS state
-│   ├── modules/             # narrowly scoped PAM module
+│   ├── modules/             # pam-folder-entitlement: narrowly scoped PAM module
 │   └── <domain>/<environment>/  # future separate roots; examples only
 └── .github/workflows/       # future CI, not configured yet
 ```
@@ -56,7 +56,7 @@ The following is the recommended division of work, not a claim that current IAM 
 
 The project and bucket belong to TrekAI's Google Cloud organization, not to the human account used to create them. On 2026-11-03 the direct `smanley-adm` project-create attempt was denied; the user explicitly approved impersonating the service account, which created the project. The state-bucket and RD PAM Terraform operations also used the admin account's Application Default Credentials (ADC) with per-command impersonation. Both human accounts are controlled by the same person, so they do not constitute independent review.
 
-`gcloud auth login` (the gcloud CLI account) and `gcloud auth application-default login` (ADC used by Terraform) are separate. Check the intended identity before a live action and never print or share tokens. Use `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` for the approved Terraform command, not as a permanent shell default. See the [PAM runbook](terraform/PAM/rd.md#how-to-run-the-pam-terraform-root). The initial bucket effective-IAM review remains on hold; do not infer either human's present permissions or service-account access from these recommendations.
+`gcloud auth login` (the gcloud CLI account) and `gcloud auth application-default login` (ADC used by Terraform) are separate. Check the intended identity before a live action and never print or share tokens. Use `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` for the approved Terraform command, not as a permanent shell default. See the [PAM runbook](terraform/pam/rd.md#how-to-run-the-pam-terraform-root). The initial bucket effective-IAM review remains on hold; do not infer either human's present permissions or service-account access from these recommendations.
 
 ## Google Cloud and Terraform controls
 
