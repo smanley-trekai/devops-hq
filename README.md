@@ -18,6 +18,8 @@ The [RD PAM guide](docs/terraform/pam/rd.md) lists the access settings. Folder-l
 
 ## How the Terraform files fit together
 
+For a short explanation of how modules, roots and state work together, see [How the structure works](docs/terraform-and-agents.md#how-the-structure-works).
+
 1. **Bootstrap root:** `terraform/bootstrap/state-bucket/` manages the bucket. Its state is in the bucket under `bootstrap/state-bucket`. The bucket was initially created with temporary local state, then that state was migrated to GCS. [Bootstrap guide](docs/terraform/bootstrap/state-bucket.md).
 2. **PAM root:** `terraform/pam/rd/` defines the RD folder's entitlement. Its `access-policy.tf` holds the reviewable folder and access settings, and `main.tf` passes them to the reusable module in `terraform/modules/pam-folder-entitlement/`. Its state is in the same bucket under a **different** prefix, `pam/rd-folder`. [PAM guide and runbook](docs/terraform/pam/rd.md).
 3. **State vs. code:** Terraform code is the set of files in this repo; state is sensitive operational data stored in GCS. Different prefixes keep the two roots' state separate, but do **not** by themselves isolate who can read the state.

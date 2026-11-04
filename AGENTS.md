@@ -26,7 +26,18 @@ For more context on TrekAI's infrastructure and products, see the separate revie
 ## Repository and Terraform workflow
 
 - Follow [INSTALLS.md](INSTALLS.md) for tool versions and [docs/terraform-and-agents.md](docs/terraform-and-agents.md) for layout and workflow. Use one root and state per approved ownership/environment boundary. Never manage one live resource from multiple states.
-- Vendored Terraform skills are in `.claude/skills/`, pinned HashiCorp copies with DevOps HQ overrides at the top of each; see each `SOURCE.md`. Use `terraform-style-guide` when writing or reviewing HCL. Use `refactor-module` only when existing resources change address within one root, such as extracting a module, renaming a resource or switching to `for_each`. This file overrides both skills, and neither skill authorizes state, plan or apply operations.
+- **The repository structure is team-agreed (2026-11-04); extend it, don't redesign it.** Read [Layout and naming conventions](docs/terraform-and-agents.md#layout-and-naming-conventions) before adding or moving any Terraform or Terraform docs. In short:
+  - Roots go in `terraform/<domain>/<scope>/` and reusable modules in `terraform/modules/<what-it-creates>/`.
+  - Paths are lowercase kebab-case; HCL labels are `snake_case`.
+  - Each root gets its own GCS state prefix and a mirrored guide under `docs/terraform/`, indexed in `docs/terraform/README.md`.
+  - PAM entitlements are named `pam-<scope>-<role>`, after the access, never the requester. More people needing the same access go in `eligible_principals`.
+
+  Leave the documented exceptions (such as `pam-rd-folder-logs-viewer-ait` and the `pam/rd-folder` prefix) as they are. Ask the user before deviating from the convention.
+- Vendored Terraform skills are in `.claude/skills/`, pinned HashiCorp copies with DevOps HQ overrides at the top of each; see each `SOURCE.md`. They are plain Markdown and apply to **every agent**, not only Claude Code. If your tool doesn't load skills from `.claude/skills/` automatically, open and follow the file yourself before starting the matching task:
+  - [`.claude/skills/terraform-style-guide/SKILL.md`](.claude/skills/terraform-style-guide/SKILL.md) (plus its `SECURITY.md`) when writing or reviewing HCL.
+  - [`.claude/skills/refactor-module/SKILL.md`](.claude/skills/refactor-module/SKILL.md) only when existing resources change address within one root, such as extracting a module, renaming a resource or switching to `for_each`.
+
+  Read each skill's "DevOps HQ overrides" section first. This file overrides both skills, and neither skill authorizes state, plan or apply operations. Don't copy the skills into other tool-specific folders; keep one reviewed copy.
 - Stay within the task's scope. Understand existing ownership, provider constraints and state before proposing infrastructure. Avoid broad IAM grants and authoritative policy resources that can overwrite PAM-managed bindings. Model changes and dependencies explicitly; label unknowns.
 - Local formatting (`terraform fmt -check -recursive`) and backend-disabled initialization/validation can be used for review when providers and network access are approved. Provider plugins execute locally: trust and verify the source. Never use credentials or a live backend to validate a draft without explicit authorization.
 - Record proposed versus completed changes, authorizing decision, affected scope, identity, verification and follow-ups in the relevant change record. Don't claim a resource or control exists until verified. Preserve existing work and never hand-edit state or lock checksums.

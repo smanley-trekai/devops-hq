@@ -10,6 +10,8 @@ A calling root supplies a numeric folder ID, entitlement ID, one or more roles (
 
 ## Naming entitlements
 
+This summarizes the team-agreed [naming conventions](../../terraform-and-agents.md#layout-and-naming-conventions).
+
 Name an entitlement after the access it grants, not the person who requests it: `pam-<scope>-<role>`, for example `pam-rd-folder-logs-viewer`. Add more people who need the same access to `eligible_principals` on the existing entitlement. Create a new entitlement only for a different role, folder, approver set or maximum duration. Entitlement IDs cannot be changed in place, so the existing `pam-rd-folder-logs-viewer-ait` keeps its contractor suffix as a known exception.
 
 Grant the narrowest roles that meet the need. Review every new role, especially roles that can change IAM, read secrets or modify resources, with the approvers before adding it.

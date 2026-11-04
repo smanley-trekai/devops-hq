@@ -1,31 +1,82 @@
 # Terraform and AI-agent working practices
 
-**Status:** proposed working model, 2026-11-03. The repo contains deployed RD PAM and state-bucket bootstrap roots. CI and deployment controls are not implemented yet; end-to-end PAM access testing remains outstanding. [Tool versions](../INSTALLS.md) · [Agent instructions](../AGENTS.md).
+**Status:** the [layout and naming conventions](#layout-and-naming-conventions) were agreed by the team on 2026-11-04; the rest of this page is a proposed working model (2026-11-03). The repo contains deployed RD PAM and state-bucket bootstrap roots. CI and deployment controls are not implemented yet; end-to-end PAM access testing remains outstanding. [Tool versions](../INSTALLS.md) · [Agent instructions](../AGENTS.md).
 
-## Layout
+## Layout and naming conventions
 
-Keep Terraform root configurations small and separate by ownership, environment and permission boundary. Each root owns one reviewed state and one provider lock file. Shared modules may be added when reuse is real and module ownership/versioning is agreed. PAM roots live under `terraform/pam/<scope>/` (lowercase, renamed from `terraform/PAM/` on 2026-11-04; the GCS state prefix `pam/rd-folder` was unchanged).
+**Agreed by the team on 2026-11-04.** Follow this structure for all new Terraform work in this repository. Humans and AI agents alike should extend it, not redesign it. Proposing a different layout is a team decision: raise it with the user rather than introducing it in a change.
+
+### How the structure works
+
+There are three building blocks:
+
+1. **Module: the template.** A module in `terraform/modules/` describes *how* to build one kind of thing. For example, `pam-folder-entitlement` always builds a PAM entitlement with one manual approval and required justifications. It contains no real folders or people, and on its own it creates nothing.
+2. **Root: the filled-in copy.** A root in `terraform/<domain>/<scope>/` uses a module and supplies the real values. For example, `terraform/pam/rd/` says "on the RD folder, these people may request Logs Viewer, and these people approve." Terraform commands run only inside a root.
+3. **State: the root's memory.** Each root keeps a record of what it has built in its own state, stored in the `devops-hq-bucket` bucket under its own prefix. For example, `terraform/pam/rd/` keeps its state under `pam/rd-folder`. Separate states mean a change in one root can't touch another root's resources.
+
+Each root and module has a matching guide in `docs/terraform/`, in the same folder path, that explains what it does and how to run it.
+
+**Example: giving the RD contractor's colleague the same Logs Viewer access.** Add their account to `eligible_principals` in `terraform/pam/rd/access-policy.tf`. The module, root and state stay the same.
+
+**Example: someone needs access on a different folder, such as `prod`.** Create a new root, `terraform/pam/prod/`, that reuses the same module. It gets its own state prefix (`pam/prod`) and its own guide (`docs/terraform/pam/prod.md`).
+
+**The rule of thumb:** write the logic once in a module. Put each set of real values in its own root, and give each root its own state.
+
+### Layout
+
+Keep Terraform root configurations small and separate by ownership, environment and permission boundary. Each root owns one reviewed state and one provider lock file. Add shared modules only when reuse is real.
 
 ```text
 devops-hq/
-├── AGENTS.md                # agent working rules
-├── INSTALLS.md              # versions and installation policy
-├── .terraform-version       # CLI selection hint
-├── docs/                    # design, runbooks and Terraform guides
-├── terraform/
-│   ├── pam/
-│   │   └── rd/              # existing folder-scoped root
-│   │       ├── versions.tf  # provider + partial backend
-│   │       ├── main.tf
-│   │       ├── access-policy.tf  # reviewed RD-specific policy inputs
-│   │       └── .terraform.lock.hcl
-│   ├── bootstrap/state-bucket/  # separate bootstrap root with GCS state
-│   ├── modules/             # pam-folder-entitlement: narrowly scoped PAM module
-│   └── <domain>/<environment>/  # future separate roots; examples only
-└── .github/workflows/       # future CI, not configured yet
+├── AGENTS.md                      # agent working rules (all agents)
+├── INSTALLS.md                    # pinned tool versions
+├── .terraform-version             # CLI selection hint
+├── .claude/skills/                # vendored Terraform skills, used by every agent (see AGENTS.md)
+├── docs/
+│   ├── terraform-and-agents.md    # this file: layout, conventions, workflow
+│   └── terraform/                 # one guide per root and module, mirroring terraform/
+│       ├── README.md              # index of every guide; add a row for each new root or module
+│       ├── <domain>/<scope>.md    # e.g. pam/rd.md, bootstrap/state-bucket.md
+│       └── modules/<module>.md    # e.g. modules/pam-folder-entitlement.md
+└── terraform/
+    ├── <domain>/<scope>/          # one root = one state, e.g. pam/rd/, bootstrap/state-bucket/
+    │   ├── versions.tf            # terraform block, exact pins, gcs backend, provider block
+    │   ├── main.tf                # resources and module calls
+    │   ├── access-policy.tf       # access-control roots only: reviewed locals (folders, roles, principals)
+    │   ├── variables.tf           # only if needed: per-operator, non-access inputs
+    │   ├── outputs.tf             # only if needed
+    │   └── .terraform.lock.hcl    # committed; never hand-edited
+    └── modules/<module>/          # reusable modules, e.g. pam-folder-entitlement/
+        ├── main.tf
+        ├── variables.tf           # every input validated
+        └── versions.tf            # minimum versions (>=), no backend or provider config
 ```
 
-For new roots, group logically in files such as `main.tf`, `variables.tf`, `outputs.tf`, `versions.tf` and `backend.tf` when appropriate. Give each root a guide under `docs/terraform/` with purpose, ownership, deployment scope, state and exact operation instructions; link the guide to its root. Do not create empty directories or speculative modules. Keep modules separate from environment-specific inputs; exact-pin module releases or immutable Git revisions. Avoid one giant state or a different state managing the same resource. [Google root-module guidance](https://docs.cloud.google.com/docs/terraform/best-practices/root-modules).
+The `.github/workflows/` CI directory does not exist yet. Don't create empty directories or speculative modules.
+
+### Naming rules
+
+| Item | Convention | Current examples |
+|---|---|---|
+| Directories and files | Lowercase, hyphen-separated (kebab-case) | `terraform/pam/`, `state-bucket/`, `access-policy.tf` |
+| Root path | `terraform/<domain>/<scope>/`. Domain is the capability (`pam`, `bootstrap`); scope is the folder, environment or target it manages | `terraform/pam/rd/`, `terraform/bootstrap/state-bucket/` |
+| Module directory | `terraform/modules/<what-it-creates>/`, named for the resource and scope, never for a person, team or one use | `pam-folder-entitlement` |
+| GCS state prefix | Unique per root in `devops-hq-bucket`, starting with the domain. New roots use the root path under `terraform/` | `bootstrap/state-bucket`; `pam/rd-folder` (existing exception, see below) |
+| Guide | `docs/terraform/` path mirroring the root or module, plus a row in `docs/terraform/README.md` | `docs/terraform/pam/rd.md` |
+| HCL labels (resources, modules, locals, variables) | `snake_case`. A module's single main resource is `this` | `module "rd_folder_logs_viewer"`, `resource "…" "this"` |
+| PAM entitlement IDs | `pam-<scope>-<role>`: name the access, not the requester | `pam-rd-folder-logs-viewer` |
+
+**PAM pattern.** To give more people the same access, add them to `eligible_principals` on the existing entitlement in that root's `access-policy.tf`. Create a new entitlement, through the `pam-folder-entitlement` module, only for a different role, folder, approver set or maximum duration. A new folder or environment gets its own root, `terraform/pam/<scope>/`, with its own state prefix.
+
+**Existing exceptions; don't "fix" them.** Changing them would replace live resources or migrate state, which needs a separate approved change:
+
+- Entitlement ID `pam-rd-folder-logs-viewer-ait` carries a contractor suffix. Entitlement IDs are immutable.
+- The RD root's state prefix is `pam/rd-folder`, not `pam/rd`.
+- Renaming an existing resource or module label changes its state address. Do it only with a `moved` block and a plan showing no changes; see the `refactor-module` skill.
+
+**Root file layout.** New roots follow the existing roots: `versions.tf` holds the `terraform` block (exact version pins from `INSTALLS.md`), the `gcs` backend and the provider block; there is no separate `backend.tf` or `providers.tf`. Access-control values (folders, roles, principals, durations) go in a committed `locals` block in `access-policy.tf`, not in variables or tfvars. Reference local modules by relative path (`../../modules/<module>`). Pin any external module to a released version or immutable Git commit.
+
+**Every new root or module** also needs a guide with its purpose, owner, scope, state prefix, exact operation instructions and a change record, plus an index row in `docs/terraform/README.md`. Avoid one giant state, and never let two states manage the same resource. [Google root-module guidance](https://docs.cloud.google.com/docs/terraform/best-practices/root-modules).
 
 ## What `access-policy.tf` contains
 
