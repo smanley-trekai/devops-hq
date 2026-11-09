@@ -17,7 +17,7 @@ The state-bucket/PAM entries reflect verification on **2026-11-03**; the IAM-exp
 
 The [RD PAM guide](docs/terraform/pam/rd.md) lists the access settings. Folder-level Logs Viewer can cover eligible logs in descendant projects, including future projects; it does not automatically cover every private or separately routed log. An older **project-level** entitlement was created separately and still exists; it is not managed by these Terraform roots.
 
-**Local proposal, 2026-11-09:** the RD root also contains a draft `pam-rd-folder-admin` entitlement for Jeferson's impersonated service account, with an eight-hour maximum. The user approved Folder Admin and the existing approvers on 2026-11-09; live plan and deployment remain outstanding. See the [proposal and CLI runbook](docs/terraform/pam/rd.md#proposed-folder-admin-access).
+**RD Folder Admin verified, 2026-11-09, 14:47 UTC:** `pam-rd-folder-admin` is `AVAILABLE` with `contractor-amplifi-jsilva@trekai.org` as the sole eligible requester, following the user-approved switch from the service account. Live read-back confirmed Folder Admin, an eight-hour maximum, one of the existing two approvers and both required justifications. The initial creation reported one added/zero changed/zero destroyed; the requester update reported zero added/one changed/zero destroyed. The requester/approval/access/expiry lifecycle remains untested, and no grant was requested or approved here. No independent human review is claimed. See the [access and request runbook](docs/terraform/pam/rd.md#proposed-folder-admin-access).
 
 ## How the Terraform files fit together
 

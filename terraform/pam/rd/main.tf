@@ -11,7 +11,7 @@ module "rd_folder_logs_viewer" {
   approver_principals  = local.rd_logs_entitlement.approver_principals
 }
 
-# Access settings approved 2026-11-09; this entitlement has not been deployed.
+# Human requester update applied; AVAILABLE/settings verified 2026-11-09.
 module "rd_folder_admin" {
   source = "../../modules/pam-folder-entitlement"
 

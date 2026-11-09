@@ -14,16 +14,16 @@ locals {
     ]
   }
 
-  # Role, service-account requester and approvers approved 2026-11-09.
-  # Live backend/plan/apply authorization remains separate; see the RD guide.
+  # Human requester switch applied and live settings verified 2026-11-09.
+  # Role, duration and approvers are unchanged; see the RD guide change record.
   # Folder Admin includes IAM changes; it is not general service administration.
   rd_folder_admin_entitlement = {
     entitlement_id       = "pam-rd-folder-admin"
     roles                = ["roles/resourcemanager.folderAdmin"]
     max_duration_seconds = 28800
-    # PAM elevates the impersonated service account that submits the request.
+    # PAM elevates Jeferson's signed-in user for console and direct CLI access.
     eligible_principals = [
-      "serviceAccount:sa-jeferson-amplifi01@trekai-ws-app-mgmt-452018.iam.gserviceaccount.com",
+      "user:contractor-amplifi-jsilva@trekai.org",
     ]
     approver_principals = [
       "user:smanley@trekai.org",

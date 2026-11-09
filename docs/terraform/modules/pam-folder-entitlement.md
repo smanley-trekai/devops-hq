@@ -2,7 +2,7 @@
 
 Creates one folder-scoped PAM entitlement granting the IAM roles the calling root supplies in `roles`. Folder access is inherited by descendant projects, including future projects. It always requires requester justification and one manual approval from the specified approver principals, with approver justification; callers cannot change these approval controls.
 
-Renamed from `pam-folder-logs-viewer` on 2026-11-04, when the hardcoded `roles/logging.viewer` became the `roles` input. The deployed RD instance passes `roles/logging.viewer`; a second, proposed instance passes `roles/resourcemanager.folderAdmin` (local draft 2026-11-09; see the [RD guide](../pam/rd.md#proposed-folder-admin-access)). Logs Viewer does not automatically grant private Data Access logs or access to separate log destinations.
+Renamed from `pam-folder-logs-viewer` on 2026-11-04, when the hardcoded `roles/logging.viewer` became the `roles` input. The deployed RD instance passes `roles/logging.viewer`; a second RD instance passes `roles/resourcemanager.folderAdmin` (deployed and live settings verified 2026-11-09; see the [RD guide](../pam/rd.md#proposed-folder-admin-access)). Logs Viewer does not automatically grant private Data Access logs or access to separate log destinations.
 
 The module code is in [`terraform/modules/pam-folder-entitlement/`](../../../terraform/modules/pam-folder-entitlement/).
 
