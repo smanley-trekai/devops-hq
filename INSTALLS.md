@@ -6,7 +6,7 @@ This file is the proposed baseline for local development and future CI. Versions
 
 | Tool | Version | Enforcement / purpose |
 |---|---|---|
-| Terraform CLI | **1.17.1** | Exact `required_version` in the PAM and bootstrap `versions.tf` files. Root `.terraform-version` is a version-manager hint; it does not install or enforce a version by itself. |
+| Terraform CLI | **1.17.1** | Exact `required_version` in the PAM, bootstrap and IAM-export storage `versions.tf` files. Root `.terraform-version` is a version-manager hint; it does not install or enforce a version by itself. |
 | Google Terraform provider | **7.22.0** | Exact provider constraint and per-root `.terraform.lock.hcl` files. Terraform installs the provider; it is not a separate CLI installation. |
 | Git | **2.54.0** observed on the initial macOS workstation | Working baseline only, not enforced; select and pin a team/CI version when CI is designed. |
 | Google Cloud CLI (`gcloud`) | **591.0.0** observed on the initial workstation | Baseline for authenticated cloud operations and troubleshooting; not enforced and not required for offline `fmt` / `validate`. Pin the CI image/tool version once a runner and deployment workflow are approved. |
@@ -20,7 +20,7 @@ The provider lock contains signed registry checksums for `darwin_arm64` and `lin
 3. Check versions with `terraform version`, `git --version`, and `gcloud --version` (if installed). Compare Terraform against `.terraform-version` and the root's `required_version`; compare the provider constraint with that root's lock file.
 4. For local syntax validation, run `terraform fmt -check -recursive` from the repo root. In the applicable root, `terraform init -backend=false -lockfile=readonly` followed by `terraform validate` checks configuration without configuring the remote backend, but may download provider plugins and executes them locally. Use trusted providers and the approved network policy. These checks do not test live resources, IAM or state.
 
-The repository currently has `terraform/pam/rd` and `terraform/bootstrap/state-bucket` roots. CI runners, Terraform lint/security scanners, GitHub CLI and any version manager are **not yet required or pinned**. Before adopting any, record its exact version, trusted source, execution permissions, supported platforms and how it is upgraded; avoid inventing pins for tools that are not in use.
+The deployed roots are `terraform/pam/rd`, `terraform/bootstrap/state-bucket` and `terraform/storage/iam-export`. The IAM-export bucket/reader apply completed on 2026-11-06 using the same pinned Terraform/provider versions; actual IAM export remains outstanding. CI runners, Terraform lint/security scanners, GitHub CLI and any version manager are **not yet required or pinned**. Before adopting any, record its exact version, trusted source, execution permissions, supported platforms and how it is upgraded; avoid inventing pins for tools that are not in use.
 
 ## Version upgrades
 

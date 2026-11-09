@@ -1,6 +1,6 @@
 # Terraform and AI-agent working practices
 
-**Status:** the [layout and naming conventions](#layout-and-naming-conventions) were agreed by the team on 2026-11-04; the rest of this page is a proposed working model (2026-11-03). The repo contains deployed RD PAM and state-bucket bootstrap roots. CI and deployment controls are not implemented yet; end-to-end PAM access testing remains outstanding. [Tool versions](../INSTALLS.md) · [Agent instructions](../AGENTS.md).
+**Status:** the [layout and naming conventions](#layout-and-naming-conventions) were agreed by the team on 2026-11-04; the rest of this page is a proposed working model (2026-11-03). The repo contains deployed RD PAM, state-bucket bootstrap and IAM-export storage roots (the last applied 2026-11-06). CI and deployment controls are not implemented yet; end-to-end PAM access testing and the IAM export remain outstanding. [Tool versions](../INSTALLS.md) · [Agent instructions](../AGENTS.md).
 
 ## Layout and naming conventions
 
