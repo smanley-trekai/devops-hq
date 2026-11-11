@@ -14,16 +14,17 @@ locals {
     ]
   }
 
-  # Human requester switch applied and live settings verified 2026-11-09.
+  # Jeferson and Boopathi eligibility applied and live-verified 2026-11-11.
   # Role, duration and approvers are unchanged; see the RD guide change record.
   # Folder Admin includes IAM changes; it is not general service administration.
   rd_folder_admin_entitlement = {
     entitlement_id       = "pam-rd-folder-admin"
     roles                = ["roles/resourcemanager.folderAdmin"]
     max_duration_seconds = 28800
-    # PAM elevates Jeferson's signed-in user for console and direct CLI access.
+    # PAM elevates eligible signed-in users for console and direct CLI access.
     eligible_principals = [
       "user:contractor-amplifi-jsilva@trekai.org",
+      "user:contractor-ait-boopathin@trekai.org",
     ]
     approver_principals = [
       "user:smanley@trekai.org",

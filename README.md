@@ -21,6 +21,8 @@ The [RD PAM guide](docs/terraform/pam/rd.md) lists the access settings. Folder-l
 
 ## How the Terraform files fit together
 
+**Boopathi Folder Admin addition applied and verified, 2026-11-11, 14:19 UTC:** the user requested the same access as Jeferson and approved applying the exact saved plan under their review for this change. Terraform reported zero added, one changed and zero destroyed. A separate live read-back confirmed `pam-rd-folder-admin` is `AVAILABLE`, with both human requesters and the existing Folder Admin role, eight-hour maximum, one of the two existing approvers and both justifications required. No independent human review is claimed. No PAM grant was requested or approved; actual request/access/expiry tests remain outstanding. See the [RD change record](docs/terraform/pam/rd.md#change-record).
+
 For a short explanation of how modules, roots and state work together, see [How the structure works](docs/terraform-and-agents.md#how-the-structure-works).
 
 1. **Bootstrap root:** `terraform/bootstrap/state-bucket/` manages the bucket. Its state is in the bucket under `bootstrap/state-bucket`. The bucket was initially created with temporary local state, then that state was migrated to GCS. [Bootstrap guide](docs/terraform/bootstrap/state-bucket.md).
