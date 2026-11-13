@@ -36,6 +36,7 @@ The repository's Terraform CLI and provider versions are pinned in [INSTALLS.md]
 
 ## What remains to do
 
+- Test [QA desktop PAM](docs/terraform/pam/qa-desktop.md) for DOKB-984: the user reported a successful saved-plan apply on 2026-11-13 (one entitlement added); their subsequent live read-back confirms `AVAILABLE` and the intended settings for temporary, hostname-restricted IAP access in `qa-virtual-machine`. The root/state prefix is `terraform/pam/qa-desktop/` / `pam/qa-desktop`. Harikaran's request/approval/access/expiry tests remain outstanding.
 - Test the contractor's request, approval, intended log access and expiration; confirm access end date and owner.
 - Resume the [state-bucket IAM review](docs/terraform/bootstrap/state-bucket-iam.md) when requested, including inherited access and backup ownership.
 - The [2026-11-06 IAM export](review/tl-trekai-terraform-review/iam-permission-org-wide/README.md) is saved in Cloud Storage and downloaded locally. Any new collection, group/effective-access analysis, IAM cleanup or data cleanup is separate work; the temporary writer condition expires on 2026-11-07 and retained exports continue to incur applicable storage charges.

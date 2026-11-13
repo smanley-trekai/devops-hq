@@ -22,6 +22,8 @@ The provider lock contains signed registry checksums for `darwin_arm64` and `lin
 
 The deployed roots are `terraform/pam/rd`, `terraform/bootstrap/state-bucket` and `terraform/storage/iam-export`. The IAM-export bucket/reader apply completed on 2026-11-06 using the same pinned Terraform/provider versions; actual IAM export remains outstanding. CI runners, Terraform lint/security scanners, GitHub CLI and any version manager are **not yet required or pinned**. Before adopting any, record its exact version, trusted source, execution permissions, supported platforms and how it is upgraded; avoid inventing pins for tools that are not in use.
 
+The [QA desktop PAM root](docs/terraform/pam/qa-desktop.md), added 2026-11-13, uses the same Terraform **1.17.1** and Google provider **7.22.0** pins. Its root owns an unchanged copy of the existing RD provider lock. Backend-disabled validation passed, and the user reported a successful saved-plan apply on 2026-11-13; their live read-back confirms `AVAILABLE` and the intended settings. Access/expiry testing remains pending.
+
 ## Version upgrades
 
 - Change `.terraform-version` and each affected root's `required_version` together. Verify formatting and backend-disabled validation using the candidate CLI. Propose CLI upgrades in a dedicated reviewed change; roll out the same version to CI and developers.
