@@ -22,3 +22,15 @@ module "rd_folder_admin" {
   eligible_principals  = local.rd_folder_admin_entitlement.eligible_principals
   approver_principals  = local.rd_folder_admin_entitlement.approver_principals
 }
+
+# Applied 2026-11-13; AVAILABLE/settings live-verified. Request lifecycle untested.
+module "rd_folder_observability_viewer" {
+  source = "../../modules/pam-folder-entitlement"
+
+  folder_id            = local.rd_folder_id
+  entitlement_id       = local.rd_observability_entitlement.entitlement_id
+  roles                = local.rd_observability_entitlement.roles
+  max_duration_seconds = local.rd_observability_entitlement.max_duration_seconds
+  eligible_principals  = local.rd_observability_entitlement.eligible_principals
+  approver_principals  = local.rd_observability_entitlement.approver_principals
+}

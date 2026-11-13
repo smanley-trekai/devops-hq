@@ -31,4 +31,21 @@ locals {
       "user:pmossman@trekai.org",
     ]
   }
+
+  # Applied 2026-11-13; AVAILABLE and all access settings live-verified at 14:13 UTC.
+  # Logs Viewer remains a separate entitlement; this adds the requested service roles.
+  rd_observability_entitlement = {
+    entitlement_id = "pam-rd-folder-observability-viewer"
+    roles = [
+      "roles/monitoring.viewer",
+      "roles/monitoring.dashboardViewer", # overlaps Monitoring Viewer; explicitly requested
+      "roles/container.viewer",
+    ]
+    max_duration_seconds = 28800
+    eligible_principals  = ["user:contractor-ait-boopathin@trekai.org"]
+    approver_principals = [
+      "user:smanley@trekai.org",
+      "user:pmossman@trekai.org",
+    ]
+  }
 }
