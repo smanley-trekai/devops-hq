@@ -26,6 +26,8 @@ The [QA desktop PAM root](docs/terraform/pam/qa-desktop.md), added 2026-11-13, u
 
 The [RD development folder/project root](docs/terraform/organization/rd-dev.md), added and applied 2026-11-13, also pins Terraform **1.17.1** and Google provider **7.22.0**. Its root owns an unchanged copy of the existing bootstrap provider lock. Revised backend-disabled validation passed; the approved apply added two resources, and live reads confirmed their parents, ACTIVE status and billing linkage.
 
+The [RD development PAM](docs/terraform/pam/rd-dev.md) and [environment-state bucket](docs/terraform/storage/rd-dev-state.md) roots added and applied 2026-11-13 use the same Terraform **1.17.1** / Google **7.22.0** pins and unchanged bootstrap lock copies. Initial and post-API-change backend-disabled validation passed for both. PAM's separately reviewed API-bootstrap and entitlement applies succeeded, and all ten access-setting checks passed. The storage root's separately reviewed apply added two resources; all fourteen live API/bucket checks passed. Requester/state I/O/expiry testing remains separate.
+
 ## Version upgrades
 
 - Change `.terraform-version` and each affected root's `required_version` together. Verify formatting and backend-disabled validation using the candidate CLI. Propose CLI upgrades in a dedicated reviewed change; roll out the same version to CI and developers.
