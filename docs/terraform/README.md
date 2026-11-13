@@ -6,6 +6,7 @@
 | [QA desktop PAM](pam/qa-desktop.md) | [`terraform/pam/qa-desktop/`](../../terraform/pam/qa-desktop/); applied, `AVAILABLE` and settings verified from user-provided read-back 2026-11-13; access/expiry testing pending |
 | [State bucket bootstrap](bootstrap/state-bucket.md) | [`terraform/bootstrap/state-bucket/`](../../terraform/bootstrap/state-bucket/) |
 | [Dedicated IAM-export bucket](storage/iam-export.md) | [`terraform/storage/iam-export/`](../../terraform/storage/iam-export/); bucket/reader applied 2026-11-06, export setup incomplete |
+| [RD development folder and project](organization/rd-dev.md) | [`terraform/organization/rd-dev/`](../../terraform/organization/rd-dev/); applied 2026-11-13: folder/project ACTIVE, parents and billing enabled verified |
 | [State bucket IAM review plan](bootstrap/state-bucket-iam.md) | Existing bucket and inherited project/folder/org IAM; review on hold |
 | [Folder PAM entitlement module](modules/pam-folder-entitlement.md) | [`terraform/modules/pam-folder-entitlement/`](../../terraform/modules/pam-folder-entitlement/) |
 
