@@ -7,7 +7,10 @@ locals {
     entitlement_id       = "pam-rd-folder-logs-viewer-ait" # existing live ID; immutable, keep
     roles                = ["roles/logging.viewer"]
     max_duration_seconds = 28800
-    eligible_principals  = ["user:contractor-ait-boopathin@trekai.org"]
+    eligible_principals = [
+      "user:contractor-ait-boopathin@trekai.org",
+      "user:contractor-cogneus-kannand@trekai.org",
+    ]
     approver_principals = [
       "user:smanley@trekai.org",
       "user:pmossman@trekai.org",
