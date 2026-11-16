@@ -1,4 +1,4 @@
-# Applied 2026-11-13; AVAILABLE and all access settings live-verified at 20:03 UTC.
+# IAP addition applied 2026-11-16; AVAILABLE and all settings verified at 16:57 UTC.
 # No contractor grant was requested by this operation; see the access runbook.
 # CAP source baseline: tl-trekcap-terraform 28f2daa, snapshot 2026-11-02.
 locals {
@@ -24,6 +24,7 @@ locals {
       "roles/iam.serviceAccountAdmin",
       "roles/iam.serviceAccountUser",
       "roles/iam.workloadIdentityPoolAdmin",
+      "roles/iap.tunnelResourceAccessor",
       "roles/monitoring.notificationChannelEditor",
       "roles/redis.admin",
       "roles/resourcemanager.projectIamAdmin",

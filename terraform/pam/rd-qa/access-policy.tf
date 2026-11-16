@@ -1,4 +1,4 @@
-# Applied 2026-11-16; AVAILABLE and all ten settings verified at 14:51 UTC.
+# IAP addition applied 2026-11-16; AVAILABLE and all ten settings verified at 16:57 UTC.
 # Same project-only pattern as Dev; no contractor grant was requested.
 locals {
   project_id = "prj-trekai-rd-qa"
@@ -11,7 +11,7 @@ locals {
       "user:contractor-amplifi-jsilva@trekai.org",
     ]
 
-    # Same sixteen roles as RD Dev. IAM/service-account administration can
+    # Dev's original sixteen roles plus IAP-secured Tunnel User. IAM can
     # create access that persists beyond a PAM grant's expiry.
     roles = [
       "roles/artifactregistry.admin",
@@ -23,6 +23,7 @@ locals {
       "roles/iam.serviceAccountAdmin",
       "roles/iam.serviceAccountUser",
       "roles/iam.workloadIdentityPoolAdmin",
+      "roles/iap.tunnelResourceAccessor",
       "roles/monitoring.notificationChannelEditor",
       "roles/redis.admin",
       "roles/resourcemanager.projectIamAdmin",

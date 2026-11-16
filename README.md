@@ -44,7 +44,10 @@ The repository's Terraform CLI and provider versions are pinned in [INSTALLS.md]
 
 **RD QA Terraform-builder PAM applied and verified, 2026-11-16, 14:51 UTC:** [`pam-rd-qa-terraform-builder`](docs/terraform/pam/rd-qa.md) is AVAILABLE for Boopathi and Jeferson on `prj-trekai-rd-qa` only, matching Dev's sixteen roles, automatic activation, mandatory justification and eight-hour maximum. API bootstrap and entitlement each reported **1 added, 0 changed, 0 destroyed** under separate user-reviewed exact-plan approvals. Direct read-back passed all ten settings checks. Both plans are consumed; no independent human review is claimed. No contractor grant was requested; requester/access/expiry tests and a separately scoped workload-state bucket remain outstanding.
 
+**Dev and QA PAM IAP additions applied and verified, 2026-11-16, 16:57 UTC:** both existing Terraform-builder entitlements now include `roles/iap.tunnelResourceAccessor` for seventeen roles total. Each separately reviewed exact-plan apply reported **0 added, 1 changed in place, 0 destroyed**; API resources were unchanged. Direct read-backs confirmed AVAILABLE and all ten settings checks for each entitlement, including both users and preserved project-only/automatic activation/justification/eight-hour controls. Both update plans are consumed; no independent human review is claimed. No grants requested/revoked; users need grant requests made after the update for IAP. Actual connectivity remains untested. See the [Dev](docs/terraform/pam/rd-dev.md#consumed-iap-role-update) and [QA](docs/terraform/pam/rd-qa.md#consumed-iap-role-update) records.
+
 ## What remains to do
+
 
 - Hand off [QA Terraform-builder PAM](docs/terraform/pam/rd-qa.md#requester-handoff) to both eligible contractors and test their own activation, intended project access and expiry. The configuration is AVAILABLE and verified; a dedicated QA workload-state bucket is separate scope and has not been created. Review contractor roots, human ADC/quota and backend ownership before Terraform use.
 
