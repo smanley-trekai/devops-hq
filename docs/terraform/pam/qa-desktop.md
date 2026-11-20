@@ -4,6 +4,16 @@
 
 The root is [`terraform/pam/qa-desktop/`](../../../terraform/pam/qa-desktop/). It defines one project-scoped entitlement, separate from the [RD folder root](rd.md), for temporary IAP browser access to the existing QA desktop. The folder module cannot express the project target and hostname condition, so this root declares the single resource directly. No existing resource changes address or state owner.
 
+**Browser onboarding applied and activated, 2026-11-17:** the user-approved CAP
+saved-plan apply added Harikaran's mapping to the VM startup payload and
+preserved `n2-standard-4`. After authorized guest inspection, the user approved
+the narrow account/configuration activation and gateway restart. His isolated
+desktop account/home and lingering are provisioned, the guest configuration
+matches source, and the restarted gateway passes its health check. The VM was
+not rebooted and the broad bootstrap was not rerun. Harikaran's real browser
+access, WebSocket session and expiry tests remain outstanding; these checks do
+not substitute for his own active-PAM-grant test.
+
 ## Configured access (user-provided live read-back, 2026-11-13)
 
 | Setting | Value |
@@ -67,6 +77,165 @@ The workflow below separates planning, apply and access verification. User-repor
 For an access problem, the immediate containment path is an authorized PAM grant revocation and confirmation that new connections are denied. Entitlement removal is a separate reviewed change; `prevent_destroy` must be deliberately addressed and does not protect a resource after its configuration is removed. Never hand-edit state. Retain the existing IAP service-agent invocation path and permanent group policies unless separately authorized to change them.
 
 ## Change record
+
+**2026-11-17 — guest inspected, narrow activation authorized and completed; requester test pending.**
+The user authorized proceeding after the metadata apply. Guest inspection as
+direct `smanley-adm@trekai.org` through IAP SSH found the gateway healthy with
+the exact pre-onboarding map, no Harikaran account/group/home, root-owned
+mode-0600 configuration and gateway/desktop code and service units matching
+the reviewed source. No established gateway TCP connections were observed.
+No guest configuration change was made during that inspection. A local source
+parser guard initially stopped before connection; after correction, inspection
+completed successfully.
+
+The user then said "okay" and "proceed" after the narrow activation was
+described: create the desktop account, enable lingering, add the guest mapping
+and restart only `qa-desktop-gateway.service`. The prepared procedure passed
+local syntax and mapping-preservation/fail-closed checks. Execution rechecked
+target metadata identity, exact guest config hash, source-matching code/units,
+healthy gateway and absence of account/group/home collisions. It held the
+existing bootstrap lock during the change and preserved all existing mappings,
+audience, origin and root-owned mode-0600 config permissions.
+
+Activation succeeded: created `qa_harikaran` and its owned home/private group,
+confirmed only its own group and no new administrator/operator group grant,
+enabled lingering, atomically installed the source-matching mapping, and
+restarted the gateway. All six postchecks passed: unprivileged account/home,
+source-matching config, root/mode-0600 config, lingering, active gateway with a
+new process and successful localhost `/healthz`. There were zero established
+gateway connections at the activation check. No rollback was needed. No VM
+reboot, full bootstrap, package install, PAM grant action or IAM role change
+was performed. No independent human review is claimed.
+
+Inspection and activation used separate temporary admin OS Login public keys
+with 15-minute expiration requested; their temporary local private key files
+were removed after each connection. These were operator authentication keys,
+not new SSH access for Harikaran. No credentials, config contents, user lists or
+application data were printed/logged; private structural summaries are under
+`review/qa-desktop-harikaran-2026-11-17/execution/`. The next acceptance check is
+Harikaran's own browser/desktop/WebSocket use with an active approved PAM grant,
+followed by new-connection expiry behavior. No actual user-access success is
+claimed yet.
+
+**2026-11-17 — exact merged-main plan approved, applied and metadata verified; guest activation pending.**
+After reviewing the mapping-only plan summary, the user explicitly said
+"approved" to applying that exact saved plan. The guarded execution rechecked
+clean `main` at `7aa063f548b84edf86104531342a4607cff3525e`, the approved SHA-256
+`63fdffbc804450a3a1f036d6b69c53b70330db50b52273b1be4282c090cede58`, the existing
+CAP backend/default workspace and direct `smanley-adm@trekai.org` identity.
+Pre-apply live metadata matched the plan's starting payload; the target was
+RUNNING as `n2-standard-4`. No impersonation was configured. Short-lived tokens
+remained in process memory and state locking was retained.
+
+The single saved-plan apply completed successfully with no diagnostics:
+**0 added, 1 changed, 0 imported, 0 destroyed**. No IAM changes were included.
+Independent direct read-back passed all four checks: expected running target
+and `n2-standard-4`, startup metadata exactly matching the approved result,
+Harikaran mapped to `qa_harikaran`, and unchanged last-start timestamp. Only
+structural summaries were saved; no decoded state/plan, raw startup payload or
+credential was printed or logged. The applied saved plan is consumed and must
+not be reused; earlier plans remain superseded. No independent human review is
+claimed; execution was under the user's exact-plan approval.
+
+No guest command, desktop account/configuration inspection, reboot, gateway
+restart or PAM grant action was performed. The next step is authorized guest
+inspection and preparation of a narrow activation procedure, followed by the
+approved account/configuration update and gateway restart. The existing broad
+bootstrap must not be rerun without its own reviewed scope. Actual requester
+desktop/WebSocket access and expiry tests remain outstanding.
+
+**2026-11-17 — size correction merged; clean-main plan ready for exact-plan apply approval.**
+The user reported the correction merged. Fast-forwarded the local CAP checkout
+to clean `main` at `7aa063f548b84edf86104531342a4607cff3525e` (PR #71). Its only
+change from the previous merge is the reviewed `n2-standard-4` correction;
+`compute.tf` matches the previously validated file byte for byte, and formatting
+checks passed for both changed HCL files. No commit, push or PR was performed
+by the agent.
+
+Created a fresh locked plan from that clean merged source as direct
+`smanley-adm@trekai.org`, retaining quota project `trekai-452018`, the confirmed
+CAP GCS backend and default workspace. The complete plan has no diagnostics:
+**0 added, 1 changed in place, 0 destroyed**, no imports, output changes or IAM
+changes. The only planned update is the target VM's startup metadata. In-memory
+comparison again confirmed only Harikaran's mapping is added; all other startup
+content is identical. Current and planned machine types are both
+`n2-standard-4`.
+
+The private saved plan is
+`review/qa-desktop-harikaran-2026-11-17/execution/qa-desktop-harikaran-merged-main.tfplan`,
+SHA-256 `63fdffbc804450a3a1f036d6b69c53b70330db50b52273b1be4282c090cede58`.
+Earlier plans are superseded and must remain unused. This plan awaits explicit
+approval to apply; no independent human review is claimed. No apply, guest
+operation, reboot, gateway restart, PAM grant action or cloud configuration
+change was performed. Guest activation and requester/expiry tests remain
+separate follow-ups after the approved metadata apply.
+
+**2026-11-17 — user confirmed preserving `n2-standard-4`; corrected draft and fresh plan, no apply.**
+The user explicitly chose to retain the current VM size. Prepared one local
+line changing `machine_type` from `n2-standard-2` to `n2-standard-4` in the CAP
+root's `compute.tf`, on branch `fix/DOKB-984-preserve-qa-machine-size`, based on
+merged commit `600926385acb424a67ae92d1fc0f0d642f852979`. The correction is
+uncommitted; no push or PR was performed. Formatting, whitespace checks and
+credential-free provider validation passed with zero errors/warnings. The
+source guard confirmed this is the only change from the merged source.
+
+A fresh locked plan as direct `smanley-adm@trekai.org`, with the same confirmed
+CAP backend/default workspace and quota project, completed with no diagnostics:
+**0 added, 1 changed in place, 0 destroyed**, no imports and no IAM changes.
+The only planned change is `google_compute_instance.qa` startup metadata.
+In-memory comparison confirmed current and planned machine type are both
+`n2-standard-4`; the only startup-script difference is Harikaran's mapping,
+with all existing mappings and other script content preserved. The machine-size
+drift and IAM etag metadata remain observations, not planned changes.
+
+The fresh private plan is at
+`review/qa-desktop-harikaran-2026-11-17/execution/qa-desktop-harikaran-preserve-n2-standard-4.tfplan`,
+SHA-256 `b594187e3d8485ca6ee9d6988cf3b2cddcccd00b00e9e58743b35576a0a44f84`.
+The rejected resize plan remains unused and must not be applied. This fresh
+plan is review evidence for the local correction, not an apply approval.
+Next: user-created review/merge of the size correction, fresh verification and
+plan against the merged source, explicit exact-plan apply approval, then
+separately authorized guest activation and requester/expiry testing. No
+independent human review is claimed. No apply, state import, guest operation,
+gateway restart, PAM grant action or cloud configuration change was performed.
+
+**2026-11-17 — merged browser onboarding change planned; unexpected VM resize, no apply.**
+The user reported PR #70 merged and then authorized proceeding step by step
+through the previously described identity/backend checks, initialization and
+live plan. The local CAP checkout is clean on `main` at
+`600926385acb424a67ae92d1fc0f0d642f852979`. Direct reads as
+`smanley-adm@trekai.org`, with quota project `trekai-452018`, confirmed ACTIVE
+project `qa-virtual-machine` (`276877441561`) under the documented RD folder,
+the RUNNING target VM in `us-central1-a`, and the existing default-workspace
+state object under `trekai-452015-org-cap-tfstate` /
+`environments/rd/qa-workstation`. No impersonation was used.
+
+Backend-disabled initialization installed HashiCorp-signed Google `5.45.2` and
+Google Beta `7.36.0`, matching this CAP root's existing constraints; no source
+constraints were changed. Credential-free local validation passed with zero
+errors/warnings after the approved outside-sandbox provider retry. Live
+initialization then confirmed the expected backend/default workspace, using a
+short-lived admin token in process memory; no credential values were persisted
+in backend configuration. The locked saved plan completed without diagnostics,
+with no imports, additions or deletions and one in-place VM update.
+
+In-memory inspection found the startup-script change adds only Harikaran's
+email-to-`qa_harikaran` mapping, preserving existing users and the rest of the
+script. However, the same update would resize the current `n2-standard-4` VM to
+the source-configured `n2-standard-2`. Other reported drift was IAM etag metadata,
+with no planned IAM changes. **The plan is not approved for apply:** preserve
+the current VM until the user resolves the machine-size discrepancy. The
+recommended next step is to confirm the larger size is intended, reconcile
+Terraform source through review and create a fresh mapping-only plan. Do not
+apply this saved plan for the browser-onboarding change.
+
+The private saved plan is at local
+`review/qa-desktop-harikaran-2026-11-17/execution/qa-desktop-harikaran.tfplan`,
+SHA-256 `8aba1a33d84ab4fadf62f0f2753745a9d20c7863eaa8c3c45e39789d7c52f7bd`;
+only a structural summary was retained alongside it. No independent human
+review is claimed. No apply, state import, grant action, guest command, reboot,
+gateway restart or cloud configuration change was performed. Guest activation,
+actual requester access and expiry testing remain outstanding.
 
 **2026-11-13 — workstation constraint clarified; browser mapping evidence found.** The user stated AIT normally accesses GCP through their own Cloud Workstations, then confirmed Harikaran has no GCP workstation. A targeted read of this VM's IAP tunnel policy as `smanley-adm@trekai.org` confirmed the contractor SSH group requires both port 22 and the `CloudWorkstationsQaSsh` access level. This cannot be treated as a laptop SSH grant. The staff group's port-22-only path is a different access boundary and was not granted to Harikaran. No firewall, access level, group, workstation or IAM change was made. The pending OS Admin Login request still needs its grant mechanism/duration and usable connection route resolved; adding that role alone does not satisfy these prerequisites.
 

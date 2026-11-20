@@ -3,6 +3,7 @@
 | Guide | Terraform files |
 |---|---|
 | [RD folder PAM](pam/rd.md) | [`terraform/pam/rd/`](../../terraform/pam/rd/); deployed Logs Viewer / Folder Admin; Monitoring/GKE viewer applied and live-verified 2026-11-13 |
+| [Hub staging API-administration PAM](pam/hub-staging.md) | [`terraform/pam/hub-staging/`](../../terraform/pam/hub-staging/); applied and AVAILABLE/all eleven settings verified 2026-11-20 15:58 UTC; manual approval, eight-hour maximum; real grant/access/expiry tests pending |
 | [QA desktop PAM](pam/qa-desktop.md) | [`terraform/pam/qa-desktop/`](../../terraform/pam/qa-desktop/); applied, `AVAILABLE` and settings verified from user-provided read-back 2026-11-13; access/expiry testing pending |
 | [RD development Terraform-builder PAM](pam/rd-dev.md) | [`terraform/pam/rd-dev/`](../../terraform/pam/rd-dev/); IAP addition applied/verified 2026-11-16 16:57 UTC; AVAILABLE, seventeen roles, both users and all ten controls verified; grant/tunnel tests pending |
 | [RD QA Terraform-builder PAM](pam/rd-qa.md) | [`terraform/pam/rd-qa/`](../../terraform/pam/rd-qa/); IAP addition applied/verified 2026-11-16 16:57 UTC; AVAILABLE, seventeen roles, both users and all ten controls verified; grant/tunnel tests pending |

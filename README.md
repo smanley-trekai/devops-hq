@@ -46,6 +46,8 @@ The repository's Terraform CLI and provider versions are pinned in [INSTALLS.md]
 
 **Dev and QA PAM IAP additions applied and verified, 2026-11-16, 16:57 UTC:** both existing Terraform-builder entitlements now include `roles/iap.tunnelResourceAccessor` for seventeen roles total. Each separately reviewed exact-plan apply reported **0 added, 1 changed in place, 0 destroyed**; API resources were unchanged. Direct read-backs confirmed AVAILABLE and all ten settings checks for each entitlement, including both users and preserved project-only/automatic activation/justification/eight-hour controls. Both update plans are consumed; no independent human review is claimed. No grants requested/revoked; users need grant requests made after the update for IAP. Actual connectivity remains untested. See the [Dev](docs/terraform/pam/rd-dev.md#consumed-iap-role-update) and [QA](docs/terraform/pam/rd-qa.md#consumed-iap-role-update) records.
 
+**Hub staging API-administration PAM applied and verified, 2026-11-20, 15:58 UTC:** [`pam-hub-staging-service-usage-admin`](docs/terraform/pam/hub-staging.md) is AVAILABLE on folder `777554202891` (`trekai-staging`) for Jeferson. The user-reviewed exact saved-plan apply reported **1 added, 0 changed, 0 destroyed**; a separate live read-back passed all eleven target/access-setting checks. Access is Service Usage Admin, with an eight-hour maximum, simple requester description and one approval from either existing RD approver. No independent human review is claimed. No grant was requested or approved; actual API use and expiry remain untested. This did not enable workload APIs or add shared Terraform-state access. State is separate under `pam/hub-staging`; the saved plan is consumed.
+
 ## What remains to do
 
 
